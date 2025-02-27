@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Лента</title>
+</head>
+<body>
+<h1>Лента новостей</h1>
+
+<!-- Форма создания поста -->
+<form th:action="@{/posts/create}" method="post">
+    <textarea name="content" placeholder="Что у вас нового?" required></textarea>
+    <button type="submit">Опубликовать</button>
+</form>
+
+<!-- Список постов -->
+<div th:each="post : ${posts}">
+    <h3 th:text="${post.author.username}"></h3>
+    <p th:text="${post.content}"></p>
+    <small th:text="${post.createdAt}"></small>
+</div>
+</body>
+</html>

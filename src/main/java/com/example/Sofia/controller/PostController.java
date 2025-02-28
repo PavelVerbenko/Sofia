@@ -1,10 +1,15 @@
 package com.example.Sofia.controller;
 
+import com.example.Sofia.model.Post;
+import com.example.Sofia.model.User;
+import com.example.Sofia.repository.PostRepository;
+import com.example.Sofia.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
@@ -29,7 +34,7 @@ public class PostController {
 
     @GetMapping
     public String getPosts(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = UserRepository.findByUsername(userDetails.getUsername());
+        User user = userRepository.findByUsername(userDetails.getUsername());
         List<Post> posts = postRepository.findByAuthorOrderByCreatedAtDesc(user);
         model.addAttribute("posts", posts);
         return "posts";

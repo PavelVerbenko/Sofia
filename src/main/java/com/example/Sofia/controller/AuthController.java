@@ -2,11 +2,14 @@ package com.example.Sofia.controller;
 
 import com.example.Sofia.model.User;
 import com.example.Sofia.repository.UserRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //Тут происходит аунтификация пользователя
 @Controller
@@ -14,6 +17,7 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -28,8 +32,10 @@ public class AuthController {
 
     @PostMapping("/registration")
     public String registerUser(User user) {
+        logger.info("Registering user: {}", user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        logger.info("User registered successfully: {}", user.getUsername());
         return "redirect:/login";
     }
 

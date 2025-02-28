@@ -1,5 +1,7 @@
 package com.example.Sofia.repository;
 
+import com.example.Sofia.model.Post;
+import com.example.Sofia.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

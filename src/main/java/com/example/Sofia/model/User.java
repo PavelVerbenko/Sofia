@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "users")
 
-//User — это сущность (entity), которая отображается на таблицу users
+//User — тут данные по пользователям, это сущность (entity), которая отображается на таблицу users
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

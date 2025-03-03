@@ -8,7 +8,7 @@
 
 <!-- Форма создания поста -->
 <form th:action="@{/posts/create}" method="post">
-    <textarea name="content" placeholder="Что у вас нового?" required></textarea>
+    <textarea name="content" placeholder="Создать пост" required></textarea>
     <button type="submit">Опубликовать</button>
 </form>
 
@@ -17,6 +17,20 @@
     <h3 th:text="${post.author.username}"></h3>
     <p th:text="${post.content}"></p>
     <small th:text="${post.createdAt}"></small>
+
+    <!-- Форма добавления комментария -->
+    <form th:action="@{/posts/{postId}/comment(postId=${post.id})}" method="post">
+        <input type="text" name="content" placeholder="Добавить комментарий..." required>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <!-- Список комментариев -->
+    <div th:each="comment : ${post.comments}">
+        <p><strong th:text="${comment.author.username}"></strong>:
+            <span th:text="${comment.content}"></span></p>
+        <small th:text="${comment.createdAt}"></small>
+    </div>
+</div>
 </div>
 </body>
 </html>

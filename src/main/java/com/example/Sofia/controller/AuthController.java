@@ -9,9 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-//Тут происходит аунтификация пользователя
+//Тут происходит регистрация пользователя
 @Controller
 public class AuthController {
 

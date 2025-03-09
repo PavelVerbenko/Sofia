@@ -2,35 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Лента</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Лента новостей</h1>
-
-<!-- Форма создания поста -->
-<form th:action="@{/posts/create}" method="post">
-    <textarea name="content" placeholder="Создать пост" required></textarea>
-    <button type="submit">Опубликовать</button>
-</form>
-
-<!-- Список постов -->
-<div th:each="post : ${posts}">
-    <h3 th:text="${post.author.username}"></h3>
-    <p th:text="${post.content}"></p>
-    <small th:text="${post.createdAt}"></small>
-
-    <!-- Форма добавления комментария -->
-    <form th:action="@{/posts/{postId}/comment(postId=${post.id})}" method="post">
-        <input type="text" name="content" placeholder="Добавить комментарий..." required>
-        <button type="submit">Отправить</button>
-    </form>
-
-    <!-- Список комментариев -->
-    <div th:each="comment : ${post.comments}">
-        <p><strong th:text="${comment.author.username}"></strong>:
-            <span th:text="${comment.content}"></span></p>
-        <small th:text="${comment.createdAt}"></small>
+<div class="container">
+    <div class="navbar">
+        <a href="/posts">Лента</a>
+        <a href="/logout">Выйти</a>
     </div>
-</div>
+
+    <div class="form-card">
+        <h1>Лента новостей</h1>
+        <form th:action="@{/posts/create}" method="post">
+            <div class="form-group">
+                <textarea name="content" placeholder="Что у вас нового?" required></textarea>
+            </div>
+            <button type="submit">Опубликовать</button>
+        </form>
+    </div>
+
+    <div th:each="post : ${posts}" class="post-card">
+        <h3 class="post-author" th:text="${post.author.username}"></h3>
+        <p class="post-content" th:text="${post.content}"></p>
+        <small class="post-time" th:text="${post.createdAt}"></small>
+
+        <div class="comment-section">
+            <form th:action="@{/posts/{postId}/comment(postId=${post.id})}" method="post">
+                <div class="form-group">
+                    <input type="text" name="content" placeholder="Добавить комментарий..." required>
+                </div>
+                <button type="submit">Отправить</button>
+            </form>
+
+            <div th:each="comment : ${post.comments}" class="comment-card">
+                <p class="post-author" th:text="${comment.author.username} + ':'"></p>
+                <p class="post-content" th:text="${comment.content}"></p>
+                <small class="post-time" th:text="${comment.createdAt}"></small>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

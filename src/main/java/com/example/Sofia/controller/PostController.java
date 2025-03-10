@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
-//лента постов текущего пользователя.
+//Создает посты/комментарии и показывает ленту друзей.
 public class PostController {
 
     private final PostRepository postRepository;
@@ -40,6 +40,8 @@ public class PostController {
     public String getPosts(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByUsername(userDetails.getUsername());
         List<Post> posts = postRepository.findByAuthorOrderByCreatedAtDesc(user);
+        List<User> friends = userRepository.findFriendsByUser(user.getId());
+        friends.add(user);
 
         posts.forEach(post -> {
             List<Comment> comments = commentRepository.findByPostIdOrderByCreatedAtDesc(post.getId());
@@ -64,4 +66,6 @@ public class PostController {
         commentRepository.save(comment);
         return "redirect:/posts";
     }
+
+
 }

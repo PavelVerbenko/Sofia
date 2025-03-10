@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Друзья</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="navbar">
+        <a href="/posts">Лента</a>
+        <a href="/friends">Друзья</a>
+        <a href="/logout">Выйти</a>
+    </div>
+
+    <!-- Форма отправки запроса -->
+    <div class="form-card">
+        <h2>Добавить друга</h2>
+        <form th:action="@{/friends/request}" method="post">
+            <input type="text" name="username" placeholder="Имя пользователя" required>
+            <button type="submit">Отправить запрос</button>
+        </form>
+    </div>
+
+    <!-- Запросы в друзья -->
+    <div class="post-card" th:if="${!requests.isEmpty()}">
+        <h2>Запросы в друзья</h2>
+        <div th:each="request : ${requests}">
+            <p th:text="${request.sender.username} + ' хочет добавить вас в друзья'"></p>
+            <form th:action="@{/friends/{id}/accept(id=${request.id})}" method="post">
+                <button type="submit">Принять</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Список друзей -->
+    <div class="post-card">
+        <h2>Ваши друзья</h2>
+        <div th:each="friend : ${friends}">
+            <p th:text="${friend.username}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

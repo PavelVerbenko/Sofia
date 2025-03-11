@@ -41,7 +41,25 @@
                 <small class="post-time" th:text="${comment.createdAt}"></small>
             </div>
         </div>
+
+        <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post">
+            <button type="submit" th:disabled="${likeRepository.existsByUserAndPost(user, post)}">❤️ <span th:text="${#lists.size(post.likes)}"></span></button>
+        </form>
     </div>
 </div>
 </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script>
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        stompClient.subscribe('/topic/notifications', function(message) {
+            alert('Новое уведомление: ' + message.body);
+        });
+    });
+</script>

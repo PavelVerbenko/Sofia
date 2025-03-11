@@ -26,7 +26,15 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
     public Post() {}
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
 
     public Post(String content, User author) {
         this.content = content;

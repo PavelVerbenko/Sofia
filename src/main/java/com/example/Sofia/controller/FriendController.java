@@ -4,6 +4,8 @@ import com.example.Sofia.model.Friendship;
 import com.example.Sofia.model.User;
 import com.example.Sofia.repository.FriendshipRepository;
 import com.example.Sofia.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -26,8 +28,11 @@ public class FriendController {
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @PostMapping("/request")
-    public String sendRequest (
+    public String sendRequest(
             @RequestParam String username,
             @AuthenticationPrincipal UserDetails userDetails,
             RedirectAttributes redirectAttributes
@@ -44,6 +49,10 @@ public class FriendController {
         request.setReceiver(receiver);
         friendshipRepository.save(request);
 
+        messagingTemplate.convertAndSend(
+                "/topic/notifications",
+                "Пользователь " + sender.getUsername() + " отправил вам запрос в друзья!"
+        );
         return "redirect:/friends";
     }
 

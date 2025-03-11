@@ -1,11 +1,14 @@
 package com.example.Sofia.controller;
 
 import com.example.Sofia.model.Comment;
+import com.example.Sofia.model.Like;
 import com.example.Sofia.model.Post;
 import com.example.Sofia.model.User;
 import com.example.Sofia.repository.CommentRepository;
+import com.example.Sofia.repository.LikeRepository;
 import com.example.Sofia.repository.PostRepository;
 import com.example.Sofia.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,11 +24,13 @@ public class PostController {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
-    public PostController(PostRepository postRepository, UserRepository userRepository, CommentRepository commentRepository) {
+    public PostController(PostRepository postRepository, UserRepository userRepository, CommentRepository commentRepository, LikeRepository likeRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.likeRepository = likeRepository;
     }
 
     @PostMapping("/create")
@@ -46,6 +51,7 @@ public class PostController {
         posts.forEach(post -> {
             List<Comment> comments = commentRepository.findByPostIdOrderByCreatedAtDesc(post.getId());
             post.setComments(comments);
+            post.setLikes(likeRepository.findByPost(post));
         });
 
         model.addAttribute("posts", posts);
@@ -67,5 +73,21 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    @PostMapping("/{postId}/like")
+    public String likePost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        Post post = postRepository.findById(postId).orElseThrow();
 
+
+        if (!likeRepository.existsByUserAndPost(user, post)) {
+            Like like = new Like();
+            like.setUser(user);
+            like.setPost(post);
+            likeRepository.save(like);
+        }
+        return "redirect:/posts";
+    }
 }

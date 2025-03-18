@@ -1,6 +1,8 @@
 package com.example.Sofia.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 
 @Entity
 @Table(name = "users")
@@ -12,8 +14,14 @@ public class User {
     private Long id;
 
     @Column(unique = true)
+    @NotBlank(message = "Имя пользователя обязательно")
+    @Size(min = 3, max = 20, message = "Имя должно быть от 3 до 20 символов")
     private String username;
     private String password;
+
+    @Column(unique = true)
+    @NotBlank(message = "Email обязателен")
+    @Email(message = "Некорректный email")
     private String email;
 
     public User() {}

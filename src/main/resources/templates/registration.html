@@ -12,7 +12,13 @@
             <div class="form-group">
                 <label>Имя пользователя:</label>
                 <input type="text" th:field="*{username}" required>
+                <div th:if="${error}" class="error-message" th:text="${error}"></div>
             </div>
+            <div th:if="${#fields.hasErrors('username')}" class="error">
+                <span th:each="err : ${#fields.errors('username')}" th:text="${err}"></span>
+            </div>
+
+            <div th:if="${error}" class="error" th:text="${error}"></div>
             <div class="form-group">
                 <label>Пароль:</label>
                 <input type="password" th:field="*{password}" required>

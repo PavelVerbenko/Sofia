@@ -2,10 +2,12 @@ package com.example.Sofia.controller;
 
 import com.example.Sofia.model.User;
 import com.example.Sofia.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.slf4j.Logger;
@@ -30,7 +32,25 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String registerUser(User user) {
+    public String registerUser(@Valid User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "registration";
+        }
+
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            model.addAttribute("error", "Имя пользователя уже занято");
+            return "registration";
+        }
+
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            model.addAttribute("error", "Email уже зарегистрирован");
+            return "registration";
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        logger.info("User registered: {}", user.getUsername());
+
         logger.info("Registering user: {}", user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

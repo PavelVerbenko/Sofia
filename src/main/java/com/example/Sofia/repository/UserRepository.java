@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
     User findByUsername(String username);
     @Query("SELECT f.receiver FROM Friendship f WHERE f.sender.id = :userId AND f.status = 'ACCEPTED'")
     List<User> findFriendsByUser(@Param("userId") Long userId);
+    User findByEmail(String email);
 }

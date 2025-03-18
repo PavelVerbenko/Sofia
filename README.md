@@ -14,22 +14,6 @@
 
 
   Архитектура проекта:
-Backend:
+Backend:   Spring Boot | Spring Security | Spring Data JPA | Redis | Kafka |
 
-Spring Boot (REST API или серверный рендеринг через Thymeleaf).
-
-Spring Security.
-
-Spring Data JPA (для работы с PostgreSQL).
-
-Redis (кэширование данных, сессии, временные токены).
-
-Kafka (асинхронная обработка событий: уведомления, логирование, аналитика).
-
-Инфраструктура:
-
-Docker (контейнеризация приложения, БД, Redis, Kafka).
-
-Docker Compose (запуск всего стека одной командой).
-
-Thymeleaf: использовал для работы с HTML-шаблоном для базового интерфейса (регистрация, лента постов, профили и т.д.).
+Инфраструктура: Docker | Docker Compose  | Thymeleaf |

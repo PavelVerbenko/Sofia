@@ -15,4 +15,5 @@
 
   Архитектура проекта:
 Backend:   Spring Boot | Spring Security | Spring Data JPA | Redis | Kafka |
+
 Инфраструктура: Docker | Docker Compose  | Thymeleaf |
